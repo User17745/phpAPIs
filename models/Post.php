@@ -109,4 +109,52 @@
             printf("Error while creating new post: %s\n", $statement->error);
             return false;
         }
+
+        // This function will update an existing post.
+        public function update() {
+            $query = 
+                "UPDATE " . $this->tableName . "
+                SET
+                    title = :title,
+                    body = :body,
+                    author = :author,
+                    category_id = :category_id
+                WHERE
+                    id = :id;
+                ";
+
+            // $query = 
+            //     "UPDATE " . $this->tableName . "
+            //     SET ";
+            // if(isset($data->title))
+            //     $query .= "title = :title, ";
+            // if(isset($data->body))
+            //     $query .= "body = :body, ";
+            // if(isset($data->author))
+            //     $query .= "author = :author, ";
+            // if(isset($data->category_id))
+            //     $query .= "category_id = :category_id ";
+            // $query .= "WHERE id = :id;";
+            
+            $statement = $this->conn->prepare($query);
+
+            // Cleaning the data
+            $this->title = htmlspecialchars(strip_tags($this->title));
+            $this->body = $this->body;
+            $this->author = htmlspecialchars(strip_tags($this->author));
+            $this->category_id = htmlspecialchars(strip_tags($this->category_id));
+            $this->id = htmlspecialchars(strip_tags($this->id));
+            
+            $statement->bindParam(":title", $this->title);
+            $statement->bindParam(":body", $this->body);
+            $statement->bindParam(":author", $this->author);
+            $statement->bindParam(":category_id", $this->category_id);
+            $statement->bindParam(":id", $this->id);
+
+            if($statement->execute())
+                return true;
+            
+            printf("Error while updating post: %s\n", $statement->error);
+            return false;
+        }
     }
