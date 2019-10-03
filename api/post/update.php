@@ -5,8 +5,6 @@
     header("Access-Control-Allow-Methods: PUT");
     header("Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Authorization, X-Requested-With");
 
-    $data = json_decode(file_get_contents("php://input"));
-
     include_once "../../config/Database.php";
     include_once "../../models/Post.php";
 
@@ -14,6 +12,8 @@
     $db = $database->connect();
 
     $post = new Post($db);
+    
+    $data = json_decode(file_get_contents("php://input"));
 
     if(isset($data)) {
         if(isset($data->id)){

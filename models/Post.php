@@ -157,4 +157,26 @@
             printf("Error while updating post: %s\n", $statement->error);
             return false;
         }
+
+        // This function will delete a post.
+        public function delete() {
+            $query = 
+                "DELETE FROM " . $this->tableName . "
+                WHERE
+                    id = :id;
+                ";
+
+            $statement = $this->conn->prepare($query);
+
+            // Cleaning the data
+            $this->id = htmlspecialchars(strip_tags($this->id));
+            
+            $statement->bindParam(":id", $this->id);
+
+            if($statement->execute())
+                return true;
+            
+            printf("Error while deleting post: %s\n", $statement->error);
+            return false;
+        }
     }
